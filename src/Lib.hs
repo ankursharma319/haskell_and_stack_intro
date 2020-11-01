@@ -155,7 +155,7 @@ getListItems (x:xs) = "The 1st list item is " ++ show x ++ " and rest are " ++ s
 
 getFirstItem :: String -> String
 getFirstItem [] = "Empty string"
-getFirstItem all@(x:xs) = "The first letter in " ++ all ++ " is " ++ [x]
+getFirstItem all@(x:_xs) = "The first letter in " ++ all ++ " is " ++ [x]
 
 times4 :: Int -> Int
 times4 x = x * 4

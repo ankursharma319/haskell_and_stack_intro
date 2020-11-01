@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1ac6aa29cce63bd41e8446f76d29a9616cefd7f90c90f0ae00e63e32cc01cffb
+-- hash: ea82e9c37044eed1c924ba73b50831834252ffc255ecf93ce8a07312ad75f3b3
 
 name:           hello-world
 version:        0.1.0.0
@@ -28,7 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
-      Tutorials
+      PhillipTutorial
   other-modules:
       Paths_hello_world
   hs-source-dirs:
