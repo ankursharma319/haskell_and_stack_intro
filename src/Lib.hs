@@ -185,7 +185,7 @@ dbl1To10 =  map (\x ->  x * 2) [1..10]
 
 -- if statements, not used as much
 doubleEvenNumber y =
-    if (y `mod` 2 /= 0)
+    if y `mod` 2 /= 0
         then y
         else y*2
 
@@ -297,13 +297,13 @@ sayHello = do
 
 writeToFile = do
     theFile <- openFile "test.txt" WriteMode
-    hPutStrLn theFile ("Random Line of text")
+    hPutStrLn theFile "Random Line of text"
     hClose theFile
 
 readFromFile = do
     theFile2 <- openFile "test.txt" ReadMode
     contents <- hGetContents theFile2
-    putStr $ contents
+    putStr contents
     hClose theFile2
 
 ------------------------------------------------
@@ -316,7 +316,7 @@ readFromFile = do
 -- a typeclass is kindof like an interface, gives us a signature for a method and we
 -- we have to implement it ourselves
 
--- Functor typpeclass Already included with Haskell
+-- Functor typeclass Already included with Haskell
 {-
 class Functor f where
     fmap :: (a -> b) ->  f a -> f b
@@ -335,7 +335,7 @@ data Maybe2 a = Just2 a | Nothing2 deriving Show
 
 instance Functor Maybe2 where
     fmap func (Just2 a) = Just2 (func a)
-    fmap func Nothing2 = Nothing2
+    fmap _func Nothing2 = Nothing2
 
 -- Functor is already defined for a lot of types like Maybe, List.
 -- for list fmap = map
@@ -371,7 +371,7 @@ class Functor f => Applicative f where
 
 -- this is the infix notation, doesnt have a normal function notation like fmap did
 
-shouldGetJust11 =fmap (+3) (Just 8)
+shouldGetJust11 = fmap (+3) (Just 8)
 --applicatives take this one step further
 -- allow us to wrap functions
 shouldGetMaybe9 = Just (+1) <*> (Just 8)
