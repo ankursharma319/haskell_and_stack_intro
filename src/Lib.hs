@@ -240,6 +240,19 @@ area :: Shape -> Float
 area (Circle _ _ radius) = pi * radius ^ 2
 area (Rectangle _ _ l w) = l * w
 
+-- data: zero or more constructors, each can contain zero or more values.
+-- DataFoo and Int totally different.
+data DataFoo = DataFoo Int
+
+-- newtype: similar to data but exactly one constructor and one value in that constructor,
+-- and has the exact same runtime representation as the value that it stores.
+-- Foo and Int different at compile time but same at runtime.
+newtype NewTypeFoo = NewTypeFoo Int
+
+-- type: type synonym, compiler more or less forgets about it once it is expanded.
+-- Foo and Int same at compile time and runtime.
+type Foo = Int
+
 -- $ sign to get rids of parantheses
 area1 = area (Circle 0 0 5)
 area2 = area $ Circle 0 0 5
