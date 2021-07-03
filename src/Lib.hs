@@ -65,6 +65,7 @@ productPrimes = product newList
 zeroToTen = [0..10]
 evenList = [2, 4 .. 20]
 letterList = ['A', 'C'  .. 'Z']
+shouldBeTrue = ['a', 'b'] == "ab"
 
 -- Haskell is lazy, will only populate when it needs to
 infinPow10 = take 50 [10, 20 ..] 
@@ -97,6 +98,12 @@ names = ["Bob", "Tom"]
 addresses = ["123 Main", "234 Secondary"]
 namesNAdresses = zip names addresses
 
+{-
+Only list of same type allowed
+But in a tuple, you can throw everything in
+
+Tuple can only be made once. Cannot edit or remove items later on. Like you can in list.
+-}
 
 -- FUNCTIONS --
 num7 = 7
