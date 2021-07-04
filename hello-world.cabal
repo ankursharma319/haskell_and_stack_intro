@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ea82e9c37044eed1c924ba73b50831834252ffc255ecf93ce8a07312ad75f3b3
+-- hash: 6fdb3d022705e8415483388590119874170a4d0b3844ea5b019fea990a26db43
 
 name:           hello-world
 version:        0.1.0.0
@@ -29,8 +29,6 @@ library
   exposed-modules:
       Lib
       PhillipTutorial
-  other-modules:
-      Paths_hello_world
   hs-source-dirs:
       src
   build-depends:
@@ -39,8 +37,6 @@ library
 
 executable hello-world-exe
   main-is: Main.hs
-  other-modules:
-      Paths_hello_world
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N

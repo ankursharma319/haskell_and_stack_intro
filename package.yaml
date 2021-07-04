@@ -24,6 +24,9 @@ dependencies:
 
 library:
   source-dirs: src
+  when:
+    - condition: false
+      other-modules: Paths_hello_world
 
 executables:
   hello-world-exe:
@@ -35,6 +38,9 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - hello-world
+    when:
+    - condition: false
+      other-modules: Paths_hello_world
 
 tests:
   hello-world-test:

@@ -4,6 +4,9 @@ module Lib where
 import Data.List
 import System.IO
 
+import Control.Applicative
+import Data.Traversable
+
 -- comment
 {-
 Multiline comment
@@ -19,6 +22,7 @@ someFunc = do
 
 maxInt = maxBound :: Int
 
+sumOfNums :: Integer
 sumOfNums = sum [1..1000]
 
 addEx = 5 + 4
@@ -31,18 +35,26 @@ num9 :: Int
 num9 = 9
 sqrtOf9 = sqrt (fromIntegral num9)
 
+floorVal :: Integer
 floorVal = floor 9.99
 ceilingVal = ceiling(9.99)
 truncateVal = truncate 9.99
 roundVal = round 9.99 
 
+trueAndFalse :: Bool
 trueAndFalse = True && False
+
+trueOrFalse :: Bool
 trueOrFalse = True || False
+
+notTrue :: Bool
 notTrue = not True
 
 -- LISTS--
 
+primeNumbers :: [Integer]
 primeNumbers = [3, 5, 7, 11]
+
 morePrimes = primeNumbers ++ [13, 17, 19]
 favNums = 2: 7:9:[]
 multList = [[3, 5, 7], [7, 9, 11]]
@@ -68,34 +80,72 @@ letterList = ['A', 'C'  .. 'Z']
 shouldBeTrue = ['a', 'b'] == "ab"
 
 -- Haskell is lazy, will only populate when it needs to
+infinPow10 :: [Integer]
 infinPow10 = take 50 [10, 20 ..] 
+
+many2s :: [Integer]
 many2s = take 10 (repeat 2)
+
+many3s :: [Integer]
 many3s = replicate 10 3
+
+cycleList :: [Integer]
 cycleList = take 10 (cycle [1,2,3,4])
+
+listTimes3Filtered :: [Integer]
 listTimes3Filtered = [x * 3 | x <- [1 .. 10], x *3 <= 20]
+
+divisibleBy9And13 :: [Integer]
 divisibleBy9And13 = [x | x <- [1..500], x `mod` 13 == 0, x `mod` 9 == 0]
+
+sortedList :: [Integer]
 sortedList = sort [9, 34, 5, 16, 8]
+
+sumOfLists :: [Integer]
 sumOfLists = zipWith (+) [1, 2, 3] [4, 5, 6]
+
+listBiggerThan5 :: [Integer]
 listBiggerThan5 = filter (>5) morePrimes
+
+listBiggerThan7 :: [Integer]
 listBiggerThan7 = [ x | x <- morePrimes, x > 7]
+
+evensUpto20 :: [Integer]
 evensUpto20 = takeWhile (<=20) [2, 4 .. ]
 
 -- apply operation to each item on list
 -- foldl from left to right
 -- foldr from right to left 
+multOfList :: Integer
 multOfList = foldl (*) 4 [2,3,5] -- gives 4 * 2 * 3 * 5
 
+pow3List :: [Integer]
 pow3List = [3^n | n <- [1..10]]
+
+multTable :: [[Integer]]
 multTable = [[x * y | y <- [1..10]] | x <- [1..10]]
 
 -- TUPLES --
 
+randTuple :: (Integer, String)
 randTuple = (1, "Random Tuple")
+
+bobSmith :: ([Char], Integer)
 bobSmith = ("Bob Smith", 52)
+
+bobsName :: [Char]
 bobsName = fst bobSmith
+
+bobsAge :: Integer
 bobsAge = snd bobSmith
+
+names :: [String]
 names = ["Bob", "Tom"]
+
+addresses :: [String]
 addresses = ["123 Main", "234 Secondary"]
+
+namesNAdresses :: [(String, String)]
 namesNAdresses = zip names addresses
 
 {-
@@ -106,8 +156,14 @@ Tuple can only be made once. Cannot edit or remove items later on. Like you can 
 -}
 
 -- FUNCTIONS --
+
+num7 :: Integer
 num7 = 7
+
+getTriple :: Num a => a -> a
 getTriple x = x  * 3
+
+tripled7 :: Integer
 tripled7 = getTriple num7
 
 addMe :: Int -> Int -> Int
@@ -129,6 +185,7 @@ factorial :: Int -> Int
 factorial 0 = 1
 factorial n = n * factorial (n-1)
 
+prodFact :: (Num a, Enum a) => a -> a
 prodFact n = product [1..n]
 
 -- guards
@@ -167,6 +224,7 @@ getFirstItem all@(x:_xs) = "The first letter in " ++ all ++ " is " ++ [x]
 times4 :: Int -> Int
 times4 x = x * 4
 
+listTimes4 :: [Int]
 listTimes4 = map times4 [1, 2, 3]
 
 multBy4 :: [Int] -> [Int]
@@ -408,8 +466,13 @@ instance Applicative Maybe2 where
     Just2 func <*> a = func <$> a
     Nothing2 <*> _ = Nothing2
 
+shouldGetNothing2 :: Maybe2 b
 shouldGetNothing2 = Nothing2 <*> (Just2 8)
+
+shouldGetNothing2Again :: Maybe2 Integer
 shouldGetNothing2Again = Just2 (+3) <*> Nothing2
+
+shouldGetMaybe2Val :: Maybe2 Integer
 shouldGetMaybe2Val = Just2 (+3) <*> Just2 1
 
 -- the left 
@@ -490,3 +553,66 @@ instance Monad Tree where
 
 g x | x == 4 = (Tip 99) | otherwise = Branch (Tip (x * 2)) (Tip (x * 4))
 examplegAppliedToTree = exampleTree >>= g
+
+---------- Traversable type class -------------
+
+{-
+Functors representing data structures that can be 
+traversed from left to right, performing an action
+on each element.
+-}
+
+
+-- traverse :: Applicative f => (a -> f b) -> t a -> f (t b) 
+-- sequenceA :: Applicative f => t (f a) -> f (t a)
+-- mapM :: Monad m => (a -> m b) -> t a -> m (t b)
+-- sequence :: Monad m => t (m a) -> m (t a) 
+
+-- sequence and sequenceA are pretty much identical except one works for monads
+-- mapM and traverse are pretty much identical except one works for monads
+
+---- traverse vs fmap ----
+
+{-
+
+fmap :: Functor f => (a -> b) -> f a -> f b
+
+if b is an traversable, this becomes
+
+fmap ::     (a -> t b) -> f a -> t (f b)
+traverse :: (a -> t b) -> f a -> f (t b)
+
+when f is the IO monad, and t is the List functor,
+while fmap returns a list of pending IO actions
+traverse returns an IO action that evaluates to a 
+list of the return values of the individual actions 
+performed left-to-right.
+
+-}
+
+--------------------------
+
+_ = fmap Just ["x", "y"] == [Just "x",Just "y"]
+_ = traverse Just ["x", "y"] == Just ["x","y"]
+
+_ = sequenceA [Just 2, Just 3] == Just [2,3]
+
+---------- Alternative type class -------------
+
+{-
+class Applicative f => Alternative f where
+  empty :: f a
+  (<|>) :: f a -> f a -> f a
+  some :: f a -> f [a]
+  many :: f a -> f [a]
+  {-# MINIMAL empty, (<|>) #-}
+-}
+_ = (empty::Maybe String) == (Nothing:: Maybe String)
+
+{-
+<|> picks the first non empty alternative
+-}
+_ = (Just 5 <|> Just 6) == Just 5
+_ = (Just 5 <|> Nothing) == Just 5
+_ = ((Nothing <|> Nothing) :: Maybe ()) == (Nothing :: Maybe ())
+_ = (Nothing <|> Just 6) == Just 6
