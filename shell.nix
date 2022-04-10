@@ -1,4 +1,4 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/db6e089456cdddcd7e2c1d8dac37a505c797e8fa.tar.gz") {}}:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/30d3d79b7d3607d56546dd2a6b49e156ba0ec634.tar.gz") {}}:
 
 pkgs.mkShell {
   buildInputs = [
@@ -6,6 +6,7 @@ pkgs.mkShell {
     pkgs.stack
     pkgs.perl
     pkgs.gmp
+    pkgs.haskellPackages.haskell-language-server
   ];
 
   shellHook = ''

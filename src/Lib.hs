@@ -475,7 +475,6 @@ shouldGetNothing2Again = Just2 (+3) <*> Nothing2
 shouldGetMaybe2Val :: Maybe2 Integer
 shouldGetMaybe2Val = Just2 (+3) <*> Just2 1
 
--- the left 
 shouldGetAMaybeMultiplier ::  Maybe2 (Integer -> Integer)
 shouldGetAMaybeMultiplier = (*) <$> (Just2 8)
 
@@ -497,6 +496,25 @@ exampleTreeMultipliedBy4 = Tip (*4) <*> exampleTree
 -- one where exampleTree multiplied by 4 and one where its multiplied by 2
 exampleTreeMultipliedByLeft4Right2 = Branch (Tip (*4)) (Tip (*2)) <*> exampleTree
 
+
+{- There is also
+  (*>) :: f a -> f b -> f b
+  (<*) :: f a -> f b -> f a
+-}
+
+isJust6 = (Just 5 :: Maybe Int) *> (Just 6 :: Maybe Int)
+isJust5 = (Just 5 :: Maybe Int) <* (Just 6 :: Maybe Int)
+isNothing1 = (Nothing :: Maybe Int) <* (Just 6 :: Maybe Int)
+isNothing2 = (Nothing :: Maybe Int) *> (Just 6 :: Maybe Int)
+isNothing3 = (Just 5 :: Maybe Int) <* (Nothing :: Maybe Int)
+isNothing4 = (Just 5 :: Maybe Int) *> (Nothing :: Maybe Int)
+
+{-
+We could implement this operation without applicative.
+The point of making this thing applicative is.
+Applicatives have some kind of inner state.
+You need to keep forwarding the state.
+-}
 ---------- MONADS -------------
 
 -- also a typeclass
@@ -554,6 +572,20 @@ instance Monad Tree where
 g x | x == 4 = (Tip 99) | otherwise = Branch (Tip (x * 2)) (Tip (x * 4))
 examplegAppliedToTree = exampleTree >>= g
 
+{-
+
+-- do notation --
+
+do 
+    x <- y 
+    f x 
+
+is equivalent to: 
+
+y >>= \x -> f x 
+
+-}
+
 ---------- Traversable type class -------------
 
 {-
@@ -571,7 +603,7 @@ on each element.
 -- sequence and sequenceA are pretty much identical except one works for monads
 -- mapM and traverse are pretty much identical except one works for monads
 
----- traverse vs fmap ----
+------------ traverse vs fmap ----------------
 
 {-
 
@@ -590,12 +622,12 @@ performed left-to-right.
 
 -}
 
---------------------------
-
 _ = fmap Just ["x", "y"] == [Just "x",Just "y"]
 _ = traverse Just ["x", "y"] == Just ["x","y"]
 
 _ = sequenceA [Just 2, Just 3] == Just [2,3]
+
+----------------------------------------------
 
 ---------- Alternative type class -------------
 
